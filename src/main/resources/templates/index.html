@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+</head>
+<body>
+    <div class="App">
+        <img th:src="@{/img/net-logo.svg}" class="App-logo" alt="logo" />
+        <h1>欢迎使用网虫计费系统！</h1><br/>
+        <nav class="nav">
+            <ul>
+                <li><a th:href="@{/interim}">临时卡登录</a></li>
+                <li><a th:href="@{/member}">会员登录</a></li>
+                <li><a th:href="@{/admin}">管理员登录</a></li>
+            </ul>
+        </nav>
+    </div>
+</body>
+</html>

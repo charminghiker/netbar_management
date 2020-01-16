@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qlu.netbar_1.mapper.IntAddRecMapper">
+    <select id="queryAll" resultType="IntAddRec">
+        select * from intaddrec
+    </select>
+    <select id="queryAdminById" parameterType="int" resultType="Date">
+        select AddTime from intaddrec where AddRecordID=#{recId}
+    </select>
+    <select id="queryById" parameterType="int" resultType="IntAddRec">
+        select * from intaddrec where AddRecordID=#{addRecId}
+    </select>
+    <select id="queryByDate" parameterType="Date" resultType="IntAddRec">
+        select * from intaddrec where AddTime&gt;=#{startDate} and AddTime &lt;=#{endDate} order by AddRecordID
+    </select>
+    <select id="querySingleByDate" resultType="IntAddRec">
+        select * from intaddrec where AddTime&gt;=#{startDate} and AddTime &lt;=#{endDate} and InterimID=#{interimId} order by AddRecordID
+    </select>
+
+    <insert id="insert" parameterType="IntAddRec">
+        insert into intaddrec(AddTime, InterimID, AddMoney, AdminID)
+          values (#{addTime}, #{interimId}, #{addMoney}, #{adminId})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        delete from intaddrec where AddRecordID=#{addRecId}
+    </delete>
+</mapper>

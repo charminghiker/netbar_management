@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qlu.netbar_1.mapper.MainManageMapper">
+    <select id="queryIntNow" resultType="InterimNow">
+        SELECT
+            m.MachineID,
+            Area,
+            StartTime,
+            InterimID,
+            AddMoney,
+            Remains
+        FROM
+            machine m
+                RIGHT JOIN intuserec i ON m.MachineID = i.MachineID WHERE i.EndTime is NULL
+    </select>
+    <select id="queryMebNow" resultType="MemberNow">
+        SELECT
+            m.MachineID,
+            Area,
+            StartTime,
+            MemberID,
+            MemberName,
+            AddMoney,
+            Consumption,
+            Remains
+        FROM
+            machine m
+                RIGHT JOIN mebuserec rec ON m.MachineID = rec.MachineID WHERE rec.EndTime is NULL
+    </select>
+
+
+    <select id="queryOneInt" parameterType="int" resultType="InterimNow">
+        SELECT
+            m.MachineID,
+            Area,
+            StartTime,
+            InterimID,
+            AddMoney,
+            Remains
+        FROM
+            machine m
+                RIGHT JOIN intuserec i ON m.MachineID = i.MachineID WHERE i.EndTime is NULL and m.MachineID=#{macId}
+    </select>
+    <select id="queryOneMeb" parameterType="int" resultType="MemberNow">
+        SELECT
+            m.MachineID,
+            Area,
+            StartTime,
+            MemberID,
+            MemberName,
+            AddMoney,
+            Consumption,
+            Remains
+        FROM
+            machine m
+                RIGHT JOIN mebuserec rec ON m.MachineID = rec.MachineID WHERE rec.EndTime is NULL and m.MachineID=#{macId}
+    </select>
+
+</mapper>

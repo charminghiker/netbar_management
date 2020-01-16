@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qlu.netbar_1.mapper.InterimMapper">
+    <select id="queryAll" resultType="interim">
+        select * from interim
+    </select>
+    <select id="queryPage" resultType="interim">
+        select * from interim limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="queryById" parameterType="int" resultType="interim">
+        select * from interim where InterimID = #{interimId}
+    </select>
+
+    <select id="queryByState" parameterType="int" resultType="interim">
+        select * from interim where InterimState = #{interimState}
+    </select>
+
+    <!--外键约束，不能自增ID-->
+    <insert id="insert" parameterType="interim">
+        insert into interim values(#{interimId},#{interimPass},#{interimState},#{interimAccount})
+    </insert>
+
+    <update id="update" parameterType="interim">
+        update interim set InterimPass=#{interimPass},InterimState=#{interimState} where InterimAccount=#{interimAccount}
+    </update>
+
+    <update id="updateStartById" parameterType="int">
+        update interim set InterimState=1,InterimAccount=#{interimAccount} where InterimID=#{interimId}
+    </update>
+    <update id="updateEndById" parameterType="int">
+        update interim set InterimState=0,InterimAccount=0 where InterimID=#{interimId}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from interim where InterimID = #{interimId}
+    </delete>
+
+</mapper>

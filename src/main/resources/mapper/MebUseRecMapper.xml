@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qlu.netbar_1.mapper.MebUseRecMapper">
+    <select id="queryAll" resultType="MebUseRec">
+        select * from mebuserec
+    </select>
+
+    <select id="queryById" parameterType="int" resultType="MebUseRec">
+        select * from mebuserec where UseRecordID = #{useRecId}
+    </select>
+    <select id="queryByDate" parameterType="Date" resultType="MebUseRec">
+        select * from mebuserec where StartTime&gt;=#{startDate} and StartTime &lt;=#{endDate} order by StartTime
+    </select>
+    <select id="querySingleByDate" resultType="MebUseRec">
+        select * from mebuserec where StartTime&gt;=#{startDate} and StartTime &lt;=#{endDate} and MemberID=#{memberId} order by StartTime
+    </select>
+
+    <insert id="insert" parameterType="MebUseRec">
+        insert into mebuserec (MachineID, StartTime, MemberID, MemberName, AdminID, AddMoney, Consumption, Remains)
+        values(#{machineId},#{startTime},#{memberId},#{memberName},#{adminId},#{addMoney},#{consumption},#{remains})
+    </insert>
+
+    <update id="updateEndByMac">
+        update mebuserec set EndTime=#{endTime},Consumption=#{consumption},Remains=#{remains} where MachineID=#{machineId} and EndTime is null
+    </update>
+
+    <update id="update" parameterType="MebUseRec">
+        update mebuserec set EndTime=#{EndTime},Consumption=#{consumption},Remains=#{remains} where UseRecordID=#{useRecId}
+    </update>
+    <update id="updAddMoney">
+        update mebuserec set AddMoney=#{addMoney}+AddMoney where MemberID=#{memberId} and EndTime is null
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from mebuserec where UseRecordID = #{useRecId}
+    </delete>
+
+</mapper>

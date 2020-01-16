@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/component.css}">
+    <link rel="stylesheet" th:href="@{/css/table.css}">
+    <title>intManage</title>
+    <script>
+        function doAdd() {
+        }
+        function init(){
+            document.getElementById("btnAdd").addEventListener("click",()=>{
+                document.getElementById("showInt").hidden = true;
+                document.getElementById("addInt").hidden = false;
+            },false);
+        }
+        window.addEventListener("load",init,false);
+    </script>
+</head>
+
+<body>
+<section id="showInt">
+    <nav id="navOperation">
+        <nav style="float: left;">
+            <button id="btnAdd" class="login-button">新增</button>
+            <button id="btnDelete" class="login-button">删除</button>
+            <button id="btnUpdate" class="login-button">修改</button>
+        </nav>
+        <nav style="text-align: right">
+            <input type="search" id="keyword" name="keyword" class="normal-input" style="height: 35px;">
+            <button type="button" class="login-button">查询</button>
+        </nav>
+    </nav>
+    <article id="main">
+        <table class="norTable">
+            <thead>
+            <tr>
+                <th><input type="checkbox" id="all"></th>
+                <th>临时卡号</th>
+                <th>密码</th>
+                <th>状态</th>
+                <th>账户</th>
+            </tr>
+            </thead>
+            <tbody id="norTableTbody" >
+            <!--<tr th:each="intAll:${intsAll}">-->
+                <!--<td style="text-align: center"><input type="checkbox" data-oid="1" class="cbxSelect"></td>-->
+                <!--&lt;!&ndash;/*@thymesVar id="machineId" type="com.qlu.netbar_1.pojo.Interim"*/&ndash;&gt;-->
+                <!--<td th:text="${intAll.interimId}">临时卡号</td>-->
+                <!--<td th:text="${intAll.interimPass}">密码</td>-->
+                <!--<td th:text="${intAll.interimState}">状态</td>-->
+                <!--<td th:text="${intAll.interimAccount}">账户</td>-->
+            <!--</tr>-->
+
+            <tr th:each="intAll:${pageInfo.list}">
+                <td style="text-align: center"><input type="checkbox" data-oid="1" class="cbxSelect"></td>
+                <td th:text="${intAll.interimId}">临时卡号</td>
+                <td th:text="${intAll.interimPass}">密码</td>
+                <td th:text="${intAll.interimState}">状态</td>
+                <td th:text="${intAll.interimAccount}">账户</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="5">
+                    <nav style="float: right;margin-right:40px;font-size: 18px;">
+                        <span>
+                            <a th:if="${not isFirstPage}" th:href="@{${'interimPage'}(pageNum=${pageNum}-1,pageSize=${pageSize})}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                            <a th:if="${isFirstPage}" href="javascript:void(0);" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </span>
+                        <span th:each="pageNo : ${#numbers.sequence(1, totalPages)}">
+                            <a th:if="${pageNum eq pageNo}" href="javascript:void(0);">
+                                <span th:text="${pageNo}"></span>
+                            </a>
+                            <a th:if="${not (pageNum eq pageNo)}" th:href="@{${'interimPage'}(pageNum=${pageNo},pageSize=${pageSize})}">
+                                <span th:text="${pageNo}"></span>
+                            </a>
+                        </span>
+                        <span>
+                            <a th:if="${not isLastPage}" th:href="@{/interimPage(info=1,pageNum=${pageNum+1},pageSize=${pageSize})}">
+                            <span>&raquo;</span>
+                            </a>
+                            <a th:if="${isLastPage}" href="javascript:void(0);" aria-label="Next">
+                                <span>&raquo;</span>
+                            </a>
+                        </span>
+                    </nav>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </article>
+</section>
+<section id="addInt" hidden>
+    <!--/*@thymesVar id="interim" type="com.qlu.netbar_1.pojo.Interim"*/-->
+    <form th:action="@{/addInterim}" th:object="${interim}"  method="post">
+            <table>
+                <tbody>
+                <tr>
+                    <td><label for="interimId" style="font-size:15px;">卡&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：</label></td>
+                    <td><input type="text" name="interimId" id="interimId" class="normal-input" th:field="*{interimId}" required></td>
+                </tr>
+                <tr>
+                    <td><label for="interimPass" style="font-size:15px;">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</label></td>
+                    <td><input type="text" name="interimPass" id="interimPass" class="normal-input" th:field="*{interimPass}" required></td>
+                </tr>
+                <tr>
+                    <td><label for="interimState" style="font-size:15px;">状态：</label></td>
+                    <td><input type="text" name="interimState" id="interimState" class="normal-input" th:field="*{interimState}"></td>
+                </tr>
+                <tr>
+                    <td><label for="interimAccount" style="font-size:15px;">账户：</label></td>
+                    <td><input type="text" name="interimAccount" id="interimAccount" class="normal-input" th:field="*{interimAccount}"></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td><button type="button" class="login-button" id="return1">返回</button></td>
+                    <td><button type="submit" class="login-button" id="btnMebSbm">提交</button></td>
+                </tr>
+                </tfoot>
+            </table>
+    </form>
+</section>
+</body>
+
+</html>

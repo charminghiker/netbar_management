@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>网虫管理</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+        .mainPage {
+            display: grid;
+            grid-template-columns: 200px auto;
+            grid-template-rows: 40px auto;
+            grid-template-areas: "headerL headerR" "left main";
+            height: 100%;
+        }
+        .top {
+            grid-area: headerL;
+            background-color: #75d8b7;
+            text-align: center;
+        }
+        .top b{
+            font-family: 华文彩云;
+            font-size: 30px;
+            color:#AA00FF;
+        }
+        .topR {
+            grid-area: headerR;
+            background-color: #75d8b7;
+        }
+        .menu {
+            grid-area: left;
+            /*margin-top: 5px;*/
+            background-color: #eef5ff;
+            /*box-shadow: #eef5ff 2px -3px 2px;*/
+        }
+        .menu ol {
+            padding-left: 0px;
+        }
+        ol>li {
+            list-style: none;
+        }
+        li>a {
+            text-decoration: none;
+            color: antiquewhite;
+        }
+        .level1Ol {
+            text-align: center;
+            margin-top: 2px;
+        }
+        .level1Li {
+            height: 35px;
+            /*margin: 1px 5px;*/
+            padding: 2px;
+            /*background-color: #5ba4fb;*/
+            background: #75d8b7;
+            color: white;
+            cursor: pointer;
+        }
+        .level2Li {
+            /*margin: 1px 5px 0px 5px;*/
+            padding: 1px;
+            /*background-color: #8ecaea;*/
+            background: #75d8b7;
+        }
+        .main {
+            grid-area: main;
+            margin-top: 5px;
+            background-color: #eef5ff;
+            box-shadow: #eef5ff 2px -3px 2px;
+        }
+        iframe {
+            margin: 0;
+            width: 100%;
+            height: 99%;
+            border: 0;
+        }
+    </style>
+<body>
+<section class="mainPage">
+    <nav class="top"><b>网虫</b></nav>
+    <nav class="topR"></nav>
+    <aside class="menu">
+        <ol class="level1Ol">
+            <ol class="level2Ol">
+                <li class="level2Li"><a th:href="@{/memberRec(memberId=${memberId})}" target="mainPage">上机记录</a></li>
+                <li class="level2Li"><a th:href="@{/memberMoney(memberId=${memberId})}" target="mainPage">充值记录</a></li>
+            </ol>
+        </ol>
+    </aside>
+    <article class="main">
+        <iframe name="mainPage" th:src="@{/welcome.html}"></iframe>
+    </article>
+</section>
+</body>
+</html>

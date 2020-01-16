@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>businessRec</title>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/component.css}">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        #navigate {
+            border: 1px solid #ccc;
+            margin: 2px 2px;
+            padding: 10px 0px;
+        }
+
+        #navOperation {
+            text-align: center;
+            border: 1px solid #ccc;
+            margin: 2px;
+            padding: 10px 0px;
+        }
+
+        #main {
+            margin: 0px 2px;
+            text-align: center;
+        }
+
+        .norTable,
+        .norTable td,
+        .norTable th {
+            border: 1px solid #c6c6c6;
+        }
+
+        .norTable {
+            margin: 0px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .norTable thead {
+            background-color: #ddeeff;
+            font-size: 15px;
+        }
+
+        .norTable tr {
+            height: 45px;
+        }
+
+        #norTableTbody tr:nth-of-type(even) {
+            background-color: #f8f8f8;
+        }
+
+        #norTableTbody tr:hover {
+            background-color: #ffe9df;
+            cursor: pointer;
+        }
+
+        .norTableCheckedRow {
+            background-color: lightcyan;
+        }
+    </style>
+    <script type="text/javascript">
+        function doSelect(){
+            let startDate = document.getElementById("startDate").value;
+            let endDate = document.getElementById("endDate").value;
+            let list = new Array();
+            list.push(startDate);
+            list.push(endDate);
+            let params = new URLSearchParams();
+            params.append("date",list);
+            axios.post("/queryRecByDate",params)
+                .then(function (response) {
+                    console.log(response);
+                    // 移除之前查询表格
+                    let bodyNode = document.getElementById("norTableTbody");
+                    while (bodyNode.hasChildNodes()) {
+                        let firstChild = bodyNode.firstChild;
+                        bodyNode.removeChild(firstChild);
+                    }
+                    for (let i=0; i<response.data.length; i++){
+                        let trNode = document.createElement("tr");
+                        let recIdNode = document.createElement("td");
+                        let macIdNode = document.createElement("td");
+                        let staTimeNode = document.createElement("td");
+                        let endTimeNode = document.createElement("td");
+                        let cardIdNode = document.createElement("td");
+                        let admIdNode = document.createElement("td");
+                        let addNode = document.createElement("td");
+                        let consupNode = document.createElement("td");
+                        let remainNode = document.createElement("td");
+                        recIdNode.innerHTML = response.data[i].useRecordId;
+                        macIdNode.innerHTML = response.data[i].machineId;
+                        // console.log(new Date(+new Date(response.data[i].startTime) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, ''));
+                        staTimeNode.innerHTML = new Date(+new Date(response.data[i].startTime) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '');
+                        if (response.data[i].endTime != null)
+                            endTimeNode.innerHTML = new Date(+new Date(response.data[i].endTime) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '');
+                        // 分别实现临时卡、会员卡号
+                        if (response.data[i].interimId != null) {
+                            cardIdNode.innerHTML = response.data[i].interimId;
+                        }else{
+                            cardIdNode.innerHTML = response.data[i].memberId;
+                        }
+                        admIdNode.innerHTML = response.data[i].adminId;
+                        addNode.innerHTML = response.data[i].addMoney;
+                        consupNode.innerHTML = response.data[i].consumption;
+                        remainNode.innerHTML = response.data[i].remains;
+                        bodyNode.appendChild(trNode);
+                        trNode.appendChild(recIdNode);
+                        trNode.appendChild(macIdNode);
+                        trNode.appendChild(staTimeNode);
+                        trNode.appendChild(endTimeNode);
+                        trNode.appendChild(cardIdNode);
+                        trNode.appendChild(admIdNode);
+                        trNode.appendChild(addNode);
+                        trNode.appendChild(consupNode);
+                        trNode.appendChild(remainNode);
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
+        function init(){
+            document.getElementById("btnSelect").addEventListener("click",doSelect,false);
+        }
+        window.addEventListener("load",init,false);
+    </script>
+</head>
+<body>
+    <nav id="navOperation">
+        <nav style="text-align: right">
+            <!--<input type="date" id="keyword" name="keyword" class="normal-input" style="height: 35px;">-->
+            <label for="startDate" style="font-size:15px">起始日期：</label>
+            <input type="date" id="startDate">&nbsp;&nbsp;
+            <label for="endDate" style="font-size:15px">截止日期：</label>
+            <input type="date" id="endDate">
+            <button type="button" id="btnSelect" class="login-button">查询</button>
+        </nav>
+    </nav>
+    <article id="main">
+        <table class="norTable" >
+            <thead>
+            <tr>
+                <th>记录编号</th>
+                <th>机器编号</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>卡号</th>
+                <th>管理员</th>
+                <th>充值</th>
+                <th>消费</th>
+                <th>余额</th>
+            </tr>
+            </thead>
+            <tbody id="norTableTbody" >
+            </tbody>
+        </table>
+    </article>
+</body>
+</html>

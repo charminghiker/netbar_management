@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qlu.netbar_1.mapper.MemberMapper">
+    <select id="queryAll" resultType="member">
+        SELECT *
+        FROM mebmst
+                 INNER JOIN mebdtl
+                            USING (MemberID)
+    </select>
+
+    <select id="queryById" parameterType="int" resultType="member">
+        SELECT *
+        FROM mebmst
+                 INNER JOIN mebdtl
+                            USING (MemberID) WHERE MemberID = #{memberId}
+    </select>
+
+
+    <!--外键约束，不能自增ID-->
+    <insert id="insertMst" parameterType="member">
+        INSERT INTO mebmst(MemberID,MemberPass,MemberName,MemberAccount)
+            VALUES(#{memberId},#{memberPass},#{memberName},#{memberAccount});
+    </insert>
+    <insert id="insertDtl" parameterType="member">
+        INSERT INTO mebdtl(MemberID,MemberIdentityID,MemberAge,AdminID,MemberDate)
+        VALUES(#{memberId},#{memberIdentityId},#{memberAge},#{adminId},#{memberDate});
+    </insert>
+
+    <update id="updateStartById" parameterType="int">
+        update mebmst set MemberState=1,MemberAccount=#{addMoney}+MemberAccount where MemberID=#{memberId}
+    </update>
+    <update id="updateEndById" parameterType="int">
+        update mebmst set MemberState=0,MemberAccount=#{memberAccount} where MemberID=#{memberId}
+    </update>
+    <update id="updateLastUse">
+        update mebdtl set LastUse=#{lastUse} where MemberID=#{memberId}
+    </update>
+
+    <!--<update id="updateMst" parameterType="member">-->
+        <!--update mebmst set MemberPass=#{memberPass},-->
+    <!--</update>-->
+    <!--<update id="updateDtl" parameterType="member">-->
+        <!--update mebdtl set MemberIdentityID=#{memberIdentityId},MemberAge=#{memberAge} where MemberID=#{memberId}-->
+    <!--</update>-->
+
+    <delete id="deleteMst" parameterType="int">
+        delete from mebmst where MemberID = #{memberId};
+    </delete>
+    <delete id="deleteDtl" parameterType="int">
+        delete from mebdtl where MemberID = #{memberId};
+    </delete>
+
+</mapper>

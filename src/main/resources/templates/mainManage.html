@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>mainManage</title>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/component.css}">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        #navigate {
+            border: 1px solid #ccc;
+            margin: 2px 2px;
+            padding: 10px 0px;
+        }
+        a{
+            color: white;
+        }
+        #navOperation {
+            text-align: center;
+            border: 1px solid #ccc;
+            margin: 2px;
+            padding: 10px 0px;
+        }
+
+        #main {
+            margin: 0px 2px;
+            text-align: center;
+        }
+
+        .norTable,
+        .norTable td,
+        .norTable th {
+            border: 1px solid #c6c6c6;
+        }
+
+        .norTable {
+            margin: 0px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .norTable thead {
+            background-color: #ddeeff;
+            font-size: 15px;
+        }
+
+        .norTable tr {
+            height: 45px;
+        }
+
+        #norTableTbody tr:nth-of-type(even) {
+            background-color: #f8f8f8;
+        }
+
+        #norTableTbody tr:hover {
+            background-color: #ffe9df;
+            cursor: pointer;
+        }
+
+        .norTableCheckedRow {
+            background-color: lightcyan;
+        }
+    </style>
+</head>
+
+<body>
+<!--<nav id="navigate">-->
+    <!--机器管理模块&nbsp;->&nbsp;在线管理页面&nbsp;<span id="operationMsg"></span>-->
+<!--</nav>-->
+<section id="macTable">
+    <nav id="navOperation">
+        <nav style="float: left;">
+            <button id="btnRefresh" class="login-button" ><a style="text-decoration: none" th:href="@{/mainManage}">刷新</a></button>
+            <button id="btnIntStart" class="login-button"><a style="text-decoration: none" th:href="@{/intStart}">上机</a></button>
+            <button id="btnMebStart" class="login-button"><a style="text-decoration: none" th:href="@{/mebStart}">激活</a></button>
+            <button id="btnUpdate" class="login-button">充值</button>
+            <button id="btnEnd" class="login-button">下机</button>
+        </nav>
+        <nav style="text-align: right">
+            <input type="number" id="keyword" name="keyword" class="normal-input" style="height: 35px;" placeholder="请输入机器编号...">
+            <button id="btnSelect" class="login-button">查询</button>
+        </nav>
+    </nav>
+    <article id="main">
+        <table class="norTable">
+            <thead>
+            <tr>
+                <th><input type="checkbox" id="all"></th>
+                <th>机器编号</th>
+                <th>区域</th>
+                <th>开始时间</th>
+                <th>已用时间</th>
+                <th>类型</th>
+                <th>卡号</th>
+                <th>姓名</th>
+                <th>预付款</th>
+                <th>消费</th>
+                <th>余额</th>
+            </tr>
+            </thead>
+            <tbody id="norTableTbody" >
+            <tr th:each="intNow:${intsNow}">
+                <td style="text-align: center"><input type="checkbox" th:id="${intNow.machineId}" class="cbxSelect"></td>
+                <!--/*@thymesVar id="intNow" type="com.qlu.netbar_1.pojo.InterimNow"*/-->
+                <td th:text="${intNow.machineId}">机器编号</td>
+                <td th:text="${intNow.area}">区域</td>
+                <td th:text="${intNow.strStar}">time</td>
+                <td th:text="${intNow.useTime}">useTime</td>
+                <td>临时卡</td>
+                <td th:text="${intNow.interimId}">卡号</td>
+                <td>interim</td>
+                <td th:text="${intNow.addMoney}">addmoney</td>
+                <td th:text="${intNow.consumption}">consump</td>
+                <td th:text="${intNow.remains}">remains</td>
+            </tr>
+            <tr th:each="mebNow:${mebsNow}">
+                <!--/*@thymesVar id="mebNow" type="com.qlu.netbar_1.pojo.MemberNow"*/-->
+                <td style="text-align: center"><input type="checkbox" th:id="${mebNow.machineId}" class="cbxSelect"></td>
+                <td th:text="${mebNow.machineId}">机器编号</td>
+                <td th:text="${mebNow.area}">区域</td>
+                <td th:text="${mebNow.strStar}">time</td>
+                <td th:text="${mebNow.useTime}" >useTime</td>
+                <td>会员</td>
+                <td th:text="${mebNow.memberId}">卡号</td>
+                <td th:text="${mebNow.memberName}">姓名</td>
+                <td th:text="${mebNow.addMoney}">addmoney</td>
+                <td th:text="${mebNow.consumption}">consump</td>
+                <td th:text="${mebNow.remains}">remains</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="11">
+
+                    <nav style="float:right">
+                        首页&nbsp;上一页&nbsp;
+                        <select class="normal-input" style="width:30px;"></select> &nbsp;下一页&nbsp;尾页
+                    </nav>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </article>
+</section>
+<section id="macUpdate" hidden>
+    <fieldset style=" border:0px;">
+        <label for="priceUpd" style="font-size:15px;">充&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;值：</label>
+        <input type="text" name="priceUpd" id="priceUpd" class="normal-input"><br>
+        <button type="button" class="login-button" id="returnUpd">返回</button>
+        <button type="button" class="login-button" id="btnMacUpd">提交</button>
+    </fieldset>
+</section>
+
+</body>
+<script defer>
+    function selectRow(event) {
+        if (event.target.tagName.toLowerCase() == 'td') {
+            let input = event.target.parentNode.firstElementChild.firstElementChild;
+            input.toggleAttribute("checked");
+            // alert(input.id);
+            event.target.parentNode.classList.toggle("norTableCheckedRow");
+        }
+    }
+
+    function allSelect() {
+        let all = document.getElementById("all");
+        document.querySelectorAll(".cbxSelect").forEach(element => {
+            element.checked = all.checked;
+        if (all.checked) {
+            element.parentNode.parentNode.classList.add("norTableCheckedRow");
+        } else {
+            element.parentNode.parentNode.classList.remove("norTableCheckedRow");
+        }
+    });
+    }
+
+    function doEnd(event) {
+        let cbxList = document.querySelectorAll(".cbxSelect");
+        let params = new URLSearchParams();
+        if(window.confirm("确定所选下机？")){
+            [...cbxList].filter(element => element.checked).forEach(element=>{
+                let list = new Array();
+                //获取账户类型、卡号、消费数据、余额
+                let type = element.parentElement.parentElement.children[5].textContent;
+                let num = element.parentElement.parentElement.children[6].textContent;
+                let consumption = element.parentElement.parentElement.children[9].textContent;
+                let remain = element.parentElement.parentElement.children[10].textContent;
+                list.push(`${element.id}`);
+                list.push(type);
+                list.push(num);
+                list.push(consumption);
+                list.push(remain);
+                params.append(`${element.id}`,list);
+            });
+            axios.post("/thisEnd", params)
+                .then(function (response) {
+                    console.log(response);
+                    alert(response.data);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+    }
+
+    function doSelect() {
+        let macId = document.getElementById("keyword").value;
+        let param = new URLSearchParams;
+        param.append("macId",macId);
+        axios.post("/queryOneMac",param)
+            .then(function (response) {
+                console.log(response);
+                if (response.data==null || response.data==""){
+                    alert("查无数据！");
+                }else {
+                    // 移除之前查询表格
+                    let bodyNode = document.getElementById("norTableTbody");
+                    while (bodyNode.hasChildNodes()) {
+                        let firstChild = bodyNode.firstChild;
+                        bodyNode.removeChild(firstChild);
+                    }
+                    let trNode = document.createElement("tr");
+                    let cbxNode = document.createElement("input");
+                    let macIdNode = document.createElement("td");
+                    let areaNode = document.createElement("td");
+                    let staTimeNode = document.createElement("td");
+                    let useTimeNode = document.createElement("td");
+                    let cardTypeNode = document.createElement("td");
+                    let cardIdNode = document.createElement("td");
+                    let cardNameNode = document.createElement("td");
+                    let addNode = document.createElement("td");
+                    let consupNode = document.createElement("td");
+                    let remainNode = document.createElement("td");
+
+                    cbxNode.setAttribute("type","checkbox");
+                    macIdNode.innerHTML = response.data.machineId;
+                    areaNode.innerHTML = response.data.area;
+                    staTimeNode.innerHTML = new Date(+new Date(response.data.startTime) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '');
+                    useTimeNode.innerHTML = response.data.useTime;
+                    // 分别实现临时卡、会员卡号
+                    if (response.data.interimId != null) {
+                        cardTypeNode.innerHTML = "临时卡";
+                        cardIdNode.innerHTML = response.data.interimId;
+                        cardNameNode.innerHTML = "";
+                    } else {
+                        cardTypeNode.innerHTML = "会员";
+                        cardIdNode.innerHTML = response.data.memberId;
+                        cardNameNode.innerHTML = "";
+                    }
+                    addNode.innerHTML = response.data.addMoney;
+                    consupNode.innerHTML = response.data.consumption;
+                    remainNode.innerHTML = response.data.remains;
+                    bodyNode.appendChild(trNode);
+                    trNode.appendChild(cbxNode);
+                    trNode.appendChild(macIdNode);
+                    trNode.appendChild(areaNode);
+                    trNode.appendChild(staTimeNode);
+                    trNode.appendChild(useTimeNode);
+                    trNode.appendChild(cardTypeNode);
+                    trNode.appendChild(cardIdNode);
+                    trNode.appendChild(cardNameNode);
+                    trNode.appendChild(addNode);
+                    trNode.appendChild(consupNode);
+                    trNode.appendChild(remainNode);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+    }
+
+    function doUpdate() {
+        let macId = -1;          //初始化机器ID
+        let countId = -1;        //初始化账户ID
+        let countType = "";      //初始化账户类型
+        let list = document.querySelectorAll(".cbxSelect");
+        let fList = [...list].filter(element => element.checked);
+        if (fList.length > 1) {
+            alert("一次只能充值一个机器！");
+        } else if (fList.length === 0) {
+            alert("请选择需充值的机器！");
+        } else {
+            let trNode = fList[0].parentNode.parentNode;
+            macId = trNode.children[1].innerHTML;
+            countType = trNode.children[5].innerHTML;
+            countId = trNode.children[6].innerHTML;
+        }
+        if (macId != -1) {
+            document.getElementById("macTable").hidden = true;
+            document.getElementById("macUpdate").hidden = false;
+
+            document.getElementById("btnMacUpd").addEventListener("click", () => {
+                let moneyUpd = document.getElementById("priceUpd").value;
+                //axios
+                let params = new URLSearchParams();
+                let list = new Array();
+                list.push(countId);
+                list.push(countType);
+                list.push(moneyUpd);
+                params.append("macId", list);
+                axios.post("/mainAddMoney", params)
+                    .then(function (response) {
+                        console.log(response);
+                        alert(response.data);
+                        document.getElementById("macTable").hidden = false;
+                        document.getElementById("macUpdate").hidden = true;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }, false);
+        }
+    }
+    //选择行操作
+    document.getElementById("norTableTbody").addEventListener("click", selectRow, false);
+    document.querySelectorAll(".cbxSelect").forEach((element) => {
+        element.addEventListener("change", () => {
+            element.toggleAttribute("checked");
+    element.parentNode.parentNode.classList.toggle("norTableCheckedRow");
+    });
+    });
+    document.getElementById("all").addEventListener("change", allSelect, false);
+
+    //CRUD update
+    document.getElementById("btnUpdate").addEventListener("click", doUpdate, false);
+    //CRUD delete
+    document.getElementById("btnEnd").addEventListener("click", doEnd, false);
+    //精确查询
+    document.getElementById("btnSelect").addEventListener("click",doSelect,false);
+
+    // document.getElementById("btnRefresh").addEventListener("click",() =>{
+    //     alert("refresh");
+    //     location.href("/mainManage");
+    // },false);
+    //CRUD add
+    //CRUD add return
+    document.getElementById("returnUpd").addEventListener("click", () => {
+        document.getElementById("macTable").hidden = false;
+        document.getElementById("macUpdate").hidden = true;
+    }, false);
+
+</script>
+
+</html>

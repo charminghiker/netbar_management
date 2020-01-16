@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>网虫管理系统</title>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="stylesheet" th:href="@{/css/component.css}">
+    <link rel="shortcut icon" th:href="@{/img/login_logo.jpg}" type="image/x-icon" />
+</head>
+<body>
+<section>
+    <aside id="logo"></aside>
+    <article id="main">
+        <!--/*@thymesVar id="interim" type="com.qlu.netbar_1.pojo.Interim"*/-->
+        <form th:action="@{/interimOnLogin}" th:object="${interim}" method="post">
+            <fieldset>
+                <legend hidden>用户登录</legend>
+                <label for="userName" style="font-size:15px;">用户名：</label>
+                <input type="text" name="userName" id="userName" class="normal-input" th:field="*{interimId}"><br>
+                <label for="password" style="font-size:15px;">密&nbsp;&nbsp;&nbsp;码：</label>
+                <input type="password" name="password" id="password" class="normal-input" th:field="*{interimPass}"><br>
+                <!--<nav id="showCookie"></nav>-->
+                <nav id="errorGroup" >
+                    <label id="errorText" th:text="${errorInfo}"></label>
+                </nav>
+                <nav id="buttonGroup">
+                    <button type="submit" class="login-button">登录</button>
+                </nav>
+            </fieldset>
+        </form>
+    </article>
+</section>
+</body>
+</html>

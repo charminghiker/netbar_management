@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/component.css}">
+    <title>Title</title>
+</head>
+<body>
+<section id="intStart">
+    <!--/*@thymesVar id="intUseRec" type="com.qlu.netbar_1.pojo.IntUseRec"*/-->
+    <form th:action="@{/addIntUseRec}" th:object="${intUseRec}" method="post">
+        <fieldset style="border:0px;">
+            <legend hidden>临时卡上机</legend>
+            <table>
+                <tbody>
+                <tr>
+                    <td><label for="interim1" style="font-size:15px;">临时卡：</label></td>
+                    <td>
+                        <select th:field="${intUseRec.interimId}" name="interim1" id="interim1" class="normal-input" style="height: 40px;">
+                            <option th:each="intIdle:${intsIdle}" th:selected="${intUseRec.interimId==intIdle.interimId}" th:value="${intIdle.interimId}" th:text="${intIdle.interimId}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="machineId1" class="text" style="font-size:15px;">机器：</label></td>
+                    <td colspan="2">
+                        <select name="machineId" id="machineId1" class="normal-input" style="height: 40px;">
+                            <option th:each="macIdle:${macsIdle}" th:text="${macIdle.machineId}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="addMoney" style="font-size:15px;">充&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;值：</label></td>
+                    <td><input type="text" name="addMoney" id="addMoney" class="normal-input" th:field="*{addMoney}" th:placeholder="请填写金额"></td>
+                </tr>
+                <tr>
+                    <td><label for="admins1" style="font-size:15px;">管理员：</label></td>
+                    <td>
+                        <select th:field="${intUseRec.adminId}" name="admins1" id="admins1" class="normal-input" style="height: 40px;">
+                            <option th:each="admin:${admins}" th:selected="${intUseRec.adminId==admin.adminId}" th:value="${admin.adminId}" th:text="${admin.adminId}"></option>
+                        </select>
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <!--<td><button type="button" class="login-button" id="return">返回</button></td>-->
+                    <td><button type="submit" class="login-button" id="btnIntSbm">提交</button></td>
+                </tr>
+                </tfoot>
+            </table>
+        </fieldset>
+    </form>
+</section>
+</body>
+</html>

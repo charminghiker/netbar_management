@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qlu.netbar_1.mapper.AdminMapper">
+    <select id="queryAll" resultType="admin">
+        select * from admin
+    </select>
+
+    <select id="queryById" parameterType="int" resultType="admin">
+        select * from admin where AdminId = #{adminId}
+    </select>
+
+    <!--外键约束，不能自增ID-->
+    <insert id="insert" parameterType="admin">
+        insert into admin values(#{adminId},#{adminName},#{adminPass})
+    </insert>
+
+    <update id="update" parameterType="admin">
+        update admin set AdminPass=#{adminPass},AdminName=#{adminName} where AdminId=#{adminId}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from admin where AdminId = #{adminId}
+    </delete>
+
+</mapper>

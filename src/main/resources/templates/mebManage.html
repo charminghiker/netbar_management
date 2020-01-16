@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/component.css}">
+    <link rel="stylesheet" th:href="@{/css/table.css}">
+    <title>mebManage</title>
+    <script>
+        function init(){
+            document.getElementById("btnAdd").addEventListener("click",()=>{
+                document.getElementById("showMeb").hidden = true;
+            document.getElementById("addMeb").hidden = false;
+        },false);
+        }
+        window.addEventListener("load",init,false);
+    </script>
+</head>
+<body>
+<section id="showMeb">
+    <nav id="navOperation">
+        <nav style="float: left;">
+            <button id="btnAdd" class="login-button">新增</button>
+            <button id="btnDelete" class="login-button">删除</button>
+            <button id="btnUpdate" class="login-button">修改</button>
+        </nav>
+        <nav style="text-align: right">
+            <input type="search" id="keyword" name="keyword" class="normal-input" style="height: 35px;">
+            <button type="button" class="login-button">查询</button>
+        </nav>
+    </nav>
+    <article id="main">
+        <table class="norTable">
+            <thead>
+            <tr>
+                <th><input type="checkbox" id="all"></th>
+                <th>会员卡号</th>
+                <th>密码</th>
+                <th>姓名</th>
+                <th>状态</th>
+                <th>账户</th>
+                <th>证件号</th>
+                <th>年龄</th>
+                <th>办理人</th>
+                <th>会员日</th>
+                <th>最后使用</th>
+            </tr>
+            </thead>
+            <tbody id="norTableTbody" >
+            <tr th:each="mebAll:${mebsAll}">
+                <!--/*@thymesVar id="mebAll" type="com.qlu.netbar_1.pojo.Member"*/-->
+                <td style="text-align: center"><input type="checkbox" data-oid="1" class="cbxSelect"></td>
+                <td th:text="${mebAll.memberId}">会员卡号</td>
+                <td th:text="${mebAll.memberPass}">密码</td>
+                <td th:text="${mebAll.memberName}">姓名</td>
+                <td th:text="${mebAll.memberState}">状态</td>
+                <td th:text="${mebAll.memberAccount}">账户</td>
+                <td th:text="${mebAll.memberIdentityId}">证件号</td>
+                <td th:text="${mebAll.memberAge}">年龄</td>
+                <td th:text="${mebAll.adminId}">办理人</td>
+                <td th:text="${mebAll.memberDate}">会员日</td>
+                <td th:text="${mebAll.lastUse}">最后使用</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="11">
+                    <nav style="float:right">
+                        首页&nbsp;上一页&nbsp;
+                        <select class="normal-input" style="width:30px;"></select> &nbsp;下一页&nbsp;尾页
+                    </nav>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </article>
+</section>
+<section id="addMeb" hidden>
+    <!--/*@thymesVar id="member" type="com.qlu.netbar_1.pojo.Member"*/-->
+    <form th:action="@{/addMember}" th:object="${member}"  method="post">
+        <table>
+            <tbody>
+            <tr>
+                <td><label for="memberId" style="font-size:15px;">卡&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：</label></td>
+                <td><input type="text" name="memberId" id="memberId" class="normal-input" th:field="*{memberId}" required></td>
+            </tr>
+            <tr>
+                <td><label for="memberPass" style="font-size:15px;">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</label></td>
+                <td><input type="text" name="memberPass" id="memberPass" class="normal-input" th:field="*{memberPass}" required></td>
+            </tr>
+            <tr>
+                <td><label for="memberName" style="font-size:15px;">姓名：</label></td>
+                <td><input type="text" name="memberName" id="memberName" class="normal-input" th:field="*{memberName}"></td>
+            </tr>
+            <tr>
+                <td><label for="memberState" style="font-size:15px;">状态：</label></td>
+                <td><input type="text" name="memberState" id="memberState" class="normal-input" th:field="*{memberState}"></td>
+            </tr>
+            <tr>
+                <td><label for="memberAccount" style="font-size:15px;">账户：</label></td>
+                <td><input type="text" name="memberAccount" id="memberAccount" class="normal-input" th:field="*{memberAccount}"></td>
+            </tr>
+            <tr>
+                <td><label for="memberIdentityId" style="font-size:15px;">证件号：</label></td>
+                <td><input type="text" name="memberIdentityId" id="memberIdentityId" class="normal-input" th:field="*{memberIdentityId}"></td>
+            </tr>
+            <tr>
+                <td><label for="memberAccount" style="font-size:15px;">年龄：</label></td>
+                <td><input type="text" name="memberAccount" id="memberAge" class="normal-input" th:field="*{memberAge}"></td>
+            </tr>
+            <tr>
+                <td><label for="memberAccount" style="font-size:15px;">办理人：</label></td>
+                <td>
+                    <select name="adminId" id="adminId" class="normal-input" style="height: 40px;">
+                        <option th:each="admin:${admins}" th:text="${admin.adminId}"></option>
+                    </select>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td><button type="button" class="login-button" id="return1">返回</button></td>
+                <td><button type="submit" class="login-button" id="btnMebSbm">提交</button></td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+</section>
+</body>
+</html>

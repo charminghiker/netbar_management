@@ -1,0 +1,28 @@
+#配置mysql连接
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3308/netbar2?serverTimezone=Asia/Shanghai&useSLL=false
+    username: root
+    password: root
+
+  #配置static目录
+    mvc:
+      static-path-pattern: static/**
+
+#配置mybatis
+mybatis:
+  #配置xml映射路径
+  mapper-locations: classpath:mapper/*.xml
+  #配置实体类的别名
+  type-aliases-package: com.qlu.netbar_1.pojo
+  configuration:
+    #开启驼峰命名法
+    map-underscore-to-camel-case: true
+
+#配置pageHelper参数
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql

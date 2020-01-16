@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qlu.netbar_1.mapper.MachineMapper">
+    <select id="queryAll" resultType="machine">
+        select * from machine
+    </select>
+
+    <select id="queryById" parameterType="int" resultType="machine">
+        select * from machine where MachineID = #{machineId}
+    </select>
+
+    <select id="queryArea" resultType="String">
+        select distinct Area from machine
+    </select>
+    <select id="queryAreaIdle" parameterType="String" resultType="machine">
+        select * from machine where Area=#{area} and MachineState = 0
+    </select>
+    <select id="queryIdle" resultType="machine">
+        select * from machine where MachineState = 0
+    </select>
+
+    <select id="queryPriceById" parameterType="int" resultType="int">
+        select Price from machine where MachineID=#{machineId}
+    </select>
+
+    <!--外键约束，不能自增ID-->
+    <insert id="insert" parameterType="machine">
+        insert into machine values(#{machineId},#{area},#{price},#{machineState})
+    </insert>
+
+    <update id="update" parameterType="machine">
+        update machine set Area=#{area},Price=#{price} where MachineID=#{machineId}
+    </update>
+    <update id="updateStartById" parameterType="int">
+        update machine set MachineState=1 where MachineID=#{machineId}
+    </update>
+    <update id="updateEndById" parameterType="int">
+        update machine set MachineState=0 where MachineID=#{machineId}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from machine where MachineID = #{machineId}
+    </delete>
+
+</mapper>

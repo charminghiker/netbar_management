@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>macManage</title>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/component.css}">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        #navigate {
+            border: 1px solid #ccc;
+            margin: 2px 2px;
+            padding: 10px 0px;
+        }
+
+        #navOperation {
+            text-align: center;
+            border: 1px solid #ccc;
+            margin: 2px;
+            padding: 10px 0px;
+        }
+
+        #main {
+            margin: 0px 2px;
+            text-align: center;
+        }
+
+        .norTable,
+        .norTable td,
+        .norTable th {
+            border: 1px solid #c6c6c6;
+        }
+
+        .norTable {
+            margin: 0px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .norTable thead {
+            background-color: #ddeeff;
+            font-size: 15px;
+        }
+
+        .norTable tr {
+            height: 45px;
+        }
+
+        #norTableTbody tr:nth-of-type(even) {
+            background-color: #f8f8f8;
+        }
+
+        #norTableTbody tr:hover {
+            background-color: #ffe9df;
+            cursor: pointer;
+        }
+
+        .norTableCheckedRow {
+            background-color: lightcyan;
+        }
+    </style>
+</head>
+<body>
+<!--<nav id="navigate">-->
+<!--&lt;!&ndash;机器管理模块&nbsp;->&nbsp;在线管理页面&nbsp;<span id="operationMsg"></span>&ndash;&gt;-->
+<!--</nav>-->
+<section id="macTable">
+    <nav id="navOperation">
+        <nav style="float: left;">
+            <button id="btnAdd" class="login-button">新增</button>
+            <button id="btnUpdate" class="login-button">修改</button>
+            <button id="btnDelete" class="login-button">删除</button>
+        </nav>
+        <nav style="text-align: right">
+            <input type="search" id="keyword" name="keyword" class="normal-input" style="height: 35px;">
+            <button type="button" class="login-button">查询</button>
+        </nav>
+    </nav>
+    <article id="main">
+        <table class="norTable">
+            <thead>
+            <tr>
+                <th><input type="checkbox" id="all"></th>
+                <th>机器编号</th>
+                <th>区域</th>
+                <th>价格</th>
+                <th>状态</th>
+            </tr>
+            </thead>
+            <tbody id="norTableTbody">
+            <tr th:each="macInfo:${pageInfo.list}">
+                <td style="text-align: center"><input type="checkbox" th:id="${macInfo.machineId}" class="cbxSelect"></td>
+                <td th:text="${macInfo.machineId}">机器编号</td>
+                <td th:text="${macInfo.area}">区域</td>
+                <td th:text="${macInfo.price}">价格</td>
+                <td th:text="${macInfo.machineState}">状态</td>
+            </tr>
+
+            </tbody>
+            <tfoot>
+            <!--<tr>-->
+                <!--<td colspan="6">-->
+
+                    <!--<nav style="float:right">-->
+                        <!--首页&nbsp;上一页&nbsp;-->
+                        <!--<select class="normal-input" style="width:30px;"></select> &nbsp;下一页&nbsp;尾页-->
+                    <!--</nav>-->
+                <!--</td>-->
+            <!--</tr>-->
+            <tr>
+                <td colspan="5">
+                    <nav style="float: right;margin-right:40px;font-size: 18px;" >
+                        <span>
+                            <a th:if="${not isFirstPage}" th:href="@{${'machinePage'}(pageNum=${pageNum}-1,pageSize=${pageSize})}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                            <a th:if="${isFirstPage}" href="javascript:void(0);" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </span>
+                        <span th:each="pageNo : ${#numbers.sequence(1, totalPages)}">
+                            <a th:if="${pageNum eq pageNo}" href="javascript:void(0);">
+                                <span th:text="${pageNo}"></span>
+                            </a>
+                            <a th:if="${not (pageNum eq pageNo)}" th:href="@{${'machinePage'}(pageNum=${pageNo},pageSize=${pageSize})}">
+                                <span th:text="${pageNo}"></span>
+                            </a>
+                        </span>
+                        <span>
+                            <a th:if="${not isLastPage}" th:href="@{/machinePage(info=1,pageNum=${pageNum+1},pageSize=${pageSize})}">
+                            <span>&raquo;</span>
+                            </a>
+                            <a th:if="${isLastPage}" href="javascript:void(0);" aria-label="Next">
+                                <span>&raquo;</span>
+                            </a>
+                        </span>
+                    </nav>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </article>
+</section>
+<section id="macAdd" hidden>
+    <!--/*@thymesVar id="machine" type="com.qlu.netbar_1.pojo.Machine"*/-->
+    <form th:action="@{/addMachine}" th:object="${machine}" method="post">
+        <fieldset style=" border:0px;">
+            <legend hidden>添加机器</legend>
+            <label for="machineId" style="font-size:15px;">机器编号：</label>
+            <input type="text" name="machineId" id="machineId" class="normal-input" th:field="*{machineId}"><br>
+            <label for="area" style="font-size:15px;">区&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;域：</label>
+            <nav id="area" style="width: 760px">
+                <input type="radio" name="area" value="极致电竞区" th:checked="*{area}">极致电竞区
+                <input type="radio" name="area" value="疯狂幻想区" th:checked="*{area}">疯狂幻想区
+                <input type="radio" name="area" value="娱乐休闲区" th:checked="*{area}">娱乐休闲区
+            </nav><br>
+            <label for="price" style="font-size:15px;">单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;价：</label>
+            <input type="text" name="price" id="price" class="normal-input" th:field="*{price}"><br>
+            <!--状态：  <input type="radio" name="sex" value="1">-->
+            <!--男&nbsp;&nbsp;<input type="radio" name="sex" value="2">女<br>-->
+            <button type="button" class="login-button" id="return">返回</button>
+            <button type="submit" class="login-button" id="btnMacAdd">提交</button>
+        </fieldset>
+    </form>
+</section>
+<section id="macUpdate" hidden>
+    <!--/*@thymesVar id="machine" type="com.qlu.netbar_1.pojo.Machine"*/-->
+    <!--<form th:action="@{/updMachine}" th:object="${machine}" method="post">-->
+        <fieldset style=" border:0px;">
+            <label for="areaUpd" style="font-size:15px;">区&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;域：</label>
+            <nav id="areaUpd" style="width: 760px">
+                <!--<input type="radio" name="area" value="极致电竞区" th:checked="*{area}">极致电竞区-->
+                <!--<input type="radio" name="area" value="疯狂幻想区" th:checked="*{area}">疯狂幻想区-->
+                <!--<input type="radio" name="area" value="娱乐休闲区" th:checked="*{area}">娱乐休闲区-->
+                <input type="radio" name="area" value="极致电竞区">极致电竞区
+                <input type="radio" name="area" value="疯狂幻想区">疯狂幻想区
+                <input type="radio" name="area" value="娱乐休闲区">娱乐休闲区
+            </nav><br>
+            <label for="priceUpd" style="font-size:15px;">单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;价：</label>
+            <input type="text" name="priceUpd" id="priceUpd" class="normal-input"><br>
+            <button type="button" class="login-button" id="returnUpd">返回</button>
+            <button type="button" class="login-button" id="btnMacUpd">提交</button>
+        </fieldset>
+    <!--</form>-->
+</section>
+<script defer>
+    function selectRow(event) {
+        if (event.target.tagName.toLowerCase() == 'td') {
+            let input = event.target.parentNode.firstElementChild.firstElementChild;
+            input.toggleAttribute("checked");
+            event.target.parentNode.classList.toggle("norTableCheckedRow");
+        }
+    }
+    function allSelect() {
+        let all = document.getElementById("all");
+        document.querySelectorAll(".cbxSelect").forEach(element => {
+            element.checked = all.checked;
+            if (all.checked) {
+                element.parentNode.parentNode.classList.add("norTableCheckedRow");
+            } else {
+                element.parentNode.parentNode.classList.remove("norTableCheckedRow");
+            }
+        });
+    }
+
+    function doAdd() {
+        document.getElementById("macTable").hidden = true;
+        document.getElementById("macAdd").hidden = false;
+        document.getElementById("macUpdate").hidden = true;
+        // document.getElementById("operationMsg").innerHTML = "->&nbsp;新增用户";
+    }
+    function back() {
+        document.getElementById("macTable").hidden = false;
+        document.getElementById("macAdd").hidden = true;
+        document.getElementById("macUpdate").hidden = true;
+        // document.getElementById("operationMsg").innerHTML = "";
+    }
+
+     function doUpdate() {
+         document.getElementById("macTable").hidden = true;
+         document.getElementById("macAdd").hidden = true;
+         document.getElementById("macUpdate").hidden = false;
+         // document.getElementById("operationMsg").innerHTML = "->&nbsp;修改用户";
+         let macId = -1;        //初始化machineId
+         let areaUpd = "";      //初始化area
+         let list = document.querySelectorAll(".cbxSelect");
+         let fList = [...list].filter(element => element.checked);
+         if (fList.length > 1) {
+             alert("一次只能修改一条机器信息！");
+         } else if (fList.length === 0) {
+             alert("请选择要修改的机器信息！");
+         } else {
+             macId = fList[0].id;
+         }
+         if (macId !== -1) {
+             document.getElementById("btnMacUpd").addEventListener("click", () => {
+                 if (window.confirm("确定修改？")) {
+                     //获取单选框area值 Method.1
+                     let areaNode = document.getElementById("areaUpd");
+                     [...areaNode.children].filter(element => element.checked).forEach(element => {
+                         areaUpd = element.value;
+                     });
+                     //获取单选框area值 Method.2
+                     // for (let i=0; i<areaNode.children.length; i++) {
+                     //     if (areaNode.children[i].checked) {
+                     //         console.log(areaNode.children[i].value);
+                     //     }
+                     // }
+                     let priceUpd = document.getElementById("priceUpd").value;
+                     //axios
+                     let params = new URLSearchParams();
+                     let list = new Array();
+                     list.push(macId);
+                     list.push(areaUpd);
+                     list.push(priceUpd);
+                     params.append("macId", list);
+                     axios.post("/updMachine", params)
+                         .then(function (response) {
+                             console.log(response);
+                             alert(response.data);
+                         })
+                         .catch(function (error) {
+                             console.log(error);
+                         });
+                 }
+             }, false);
+         }
+     }
+
+    function doDelete(event) {
+        let cbxList = document.querySelectorAll(".cbxSelect");
+        //********** axios
+        let params = new URLSearchParams();
+        if(window.confirm("确定删除所选信息？")){
+            [...cbxList].filter(element => element.checked).forEach(element=>{
+                params.append(`${element.id}`,element.id);
+            });
+            axios.post("/delMachine", params)
+                .then(function (response) {
+                    console.log(response);
+                    alert(response.data);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+    }
+
+    document.getElementById("norTableTbody").addEventListener("click", selectRow, false); //选择行操作
+    // document.querySelectorAll(".cbxSelect").forEach((element) => {
+    //     element.addEventListener("change", () => {
+    //         element.toggleAttribute("checked");
+    //         element.parentNode.parentNode.classList.toggle("norTableCheckedRow");
+    //     });
+    // });
+    //全选
+    document.getElementById("all").addEventListener("change", allSelect, false);
+    //CRUD add
+    document.getElementById("btnAdd").addEventListener("click", doAdd, false);
+    //CRUD add return
+    document.getElementById("return").addEventListener("click",back, false);
+    document.getElementById("returnUpd").addEventListener("click",back, false);
+    //CRUD update
+    document.getElementById("btnUpdate").addEventListener("click", doUpdate, false);
+    //CRUD delete
+    document.getElementById("btnDelete").addEventListener("click", doDelete, false);
+</script>
+</body>
+</html>

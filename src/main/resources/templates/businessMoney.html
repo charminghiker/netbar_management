@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>businessRec</title>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/component.css}">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        #navigate {
+            border: 1px solid #ccc;
+            margin: 2px 2px;
+            padding: 10px 0px;
+        }
+
+        #navOperation {
+            text-align: center;
+            border: 1px solid #ccc;
+            margin: 2px;
+            padding: 10px 0px;
+        }
+
+        #main {
+            margin: 0px 2px;
+            text-align: center;
+        }
+
+        .norTable,
+        .norTable td,
+        .norTable th {
+            border: 1px solid #c6c6c6;
+        }
+
+        .norTable {
+            margin: 0px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .norTable thead {
+            background-color: #ddeeff;
+            font-size: 15px;
+        }
+
+        .norTable tr {
+            height: 45px;
+        }
+
+        #norTableTbody tr:nth-of-type(even) {
+            background-color: #f8f8f8;
+        }
+
+        #norTableTbody tr:hover {
+            background-color: #ffe9df;
+            cursor: pointer;
+        }
+
+        .norTableCheckedRow {
+            background-color: lightcyan;
+        }
+    </style>
+    <script type="text/javascript">
+        function doSelect(){
+            let startDate = document.getElementById("startDate").value;
+            let endDate = document.getElementById("endDate").value;
+            let list = new Array();
+            list.push(startDate);
+            list.push(endDate);
+            let params = new URLSearchParams();
+            params.append("date",list);
+            axios.post("/queryMoneyByDate",params)
+                .then(function (response) {
+                    console.log(response);
+                    // 移除之前查询表格
+                    let bodyNode = document.getElementById("norTableTbody");
+                    while (bodyNode.hasChildNodes()) {
+                        let firstChild = bodyNode.firstChild;
+                        bodyNode.removeChild(firstChild);
+                    }
+                    for (let i=0; i<response.data.length; i++){
+                        let trNode = document.createElement("tr");
+                        let recIdNode = document.createElement("td");
+                        let cardIdNode = document.createElement("td");
+                        let addTimeNode = document.createElement("td");
+                        let addMoneyNode = document.createElement("td");
+                        let admIdNode = document.createElement("td");
+                        recIdNode.innerHTML = response.data[i].addRecordId;
+                        addTimeNode.innerHTML = new Date(+new Date(response.data[i].addTime) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '');
+                        // 分别实现临时卡、会员卡号
+                        if (response.data[i].interimId != null) {
+                            cardIdNode.innerHTML = response.data[i].interimId;
+                        }else{
+                            cardIdNode.innerHTML = response.data[i].memberId;
+                        }
+                        addMoneyNode.innerHTML = response.data[i].addMoney;
+                        admIdNode.innerHTML = response.data[i].adminId;
+                        bodyNode.appendChild(trNode);
+                        trNode.appendChild(recIdNode);
+                        trNode.appendChild(cardIdNode);
+                        trNode.appendChild(addTimeNode);
+                        trNode.appendChild(addMoneyNode);
+                        trNode.appendChild(admIdNode);
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
+        function init(){
+            document.getElementById("btnSelect").addEventListener("click",doSelect,false);
+        }
+        window.addEventListener("load",init,false);
+    </script>
+</head>
+<body>
+<nav id="navOperation">
+    <nav style="text-align: right">
+        <!--<input type="date" id="keyword" name="keyword" class="normal-input" style="height: 35px;">-->
+        <label for="startDate" style="font-size:15px">起始日期：</label>
+        <input type="date" id="startDate">&nbsp;&nbsp;
+        <label for="endDate" style="font-size:15px">截止日期：</label>
+        <input type="date" id="endDate">
+        <button type="button" id="btnSelect" class="login-button">查询</button>
+    </nav>
+</nav>
+<article id="main">
+    <table class="norTable" >
+        <thead>
+        <tr>
+            <th>记录编号</th>
+            <th>账户</th>
+            <th>充值时间</th>
+            <th>充值额度</th>
+            <th>管理员</th>
+        </tr>
+        </thead>
+        <tbody id="norTableTbody" >
+        </tbody>
+    </table>
+</article>
+</body>
+</html>

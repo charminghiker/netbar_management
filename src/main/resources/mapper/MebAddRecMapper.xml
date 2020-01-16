@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qlu.netbar_1.mapper.MebAddRecMapper">
+    <select id="queryAll" resultType="MebAddRec">
+        select * from mebaddrec
+    </select>
+    <select id="queryById" parameterType="int" resultType="MebAddRec">
+        select * from mebaddrec where AddRecordID=#{addRecId}
+    </select>
+    <select id="queryByDate" parameterType="Date" resultType="MebAddRec">
+        select * from mebaddrec where AddTime&gt;=#{startDate} and AddTime &lt;=#{endDate} order by AddTime
+    </select>
+    <select id="querySingleByDate" resultType="MebAddRec">
+        select * from mebaddrec where AddTime&gt;=#{startDate} and AddTime &lt;=#{endDate} and MemberID=#{memberId} order by AddTime
+    </select>
+
+    <insert id="insert" parameterType="MebAddRec">
+        insert into mebaddrec(AddTime, InterimID, AddMoney, AdminID)
+        values (#{addTime}, #{interimId}, #{addMoney}, #{adminId})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        delete from mebaddrec where AddRecordID=#{addRecId}
+    </delete>
+</mapper>

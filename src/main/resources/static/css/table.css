@@ -1,0 +1,51 @@
+#navigate {
+    border: 1px solid #ccc;
+    margin: 2px 2px;
+    padding: 10px 0px;
+}
+
+#navOperation {
+    text-align: center;
+    border: 1px solid #ccc;
+    margin: 2px;
+    padding: 10px 0px;
+}
+
+#main {
+    margin: 0px 2px;
+    text-align: center;
+}
+
+.norTable,
+.norTable td,
+.norTable th {
+    border: 1px solid #c6c6c6;
+}
+
+.norTable {
+    margin: 0px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.norTable thead {
+    background-color: #ddeeff;
+    font-size: 15px;
+}
+
+.norTable tr {
+    height: 45px;
+}
+
+#norTableTbody tr:nth-of-type(even) {
+    background-color: #f8f8f8;
+}
+
+#norTableTbody tr:hover {
+    background-color: #ffe9df;
+    cursor: pointer;
+}
+
+.norTableCheckedRow {
+    background-color: lightcyan;
+}

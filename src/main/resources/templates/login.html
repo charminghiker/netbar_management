@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>登录</title>
+    <link rel="stylesheet" th:href="@{../static/css/base.css}">
+    <link rel="stylesheet" th:href="@{../static/css/login.css}">
+    <link rel="stylesheet" th:href="@{../static/css/component.css}">
+    <script>
+        function selectCookie() {
+            let o = document.getElementById("cookieGroup");
+            let nav = document.getElementById("showCookie");
+            if (o.hidden) {
+                o.hidden = false;
+                nav.classList.remove("change");
+            } else {
+                o.hidden = true;
+                nav.classList.add("change");
+            }
+        }
+
+        function init() {
+            //监听绿色小按钮，当该按钮被点击时，执行selectCookie函数
+            document.getElementById("showCookie").addEventListener("click", selectCookie, false);
+        }
+        window.addEventListener("load", init, false); //监听网页加载事件，加载完成后执行init函数。
+
+    </script>
+</head>
+
+<body>
+    <section>
+        <aside id="logo"></aside>
+        <article id="main">
+            <form action="views/main.html" method="get">
+                <fieldset>
+                    <legend hidden>用户登录</legend>
+                    <label for="userName" style="font-size:15px;">用户名：</label>
+                    <input type="text" name="userName" id="userName" class="normal-input"><br>
+                    <label for="password" style="font-size:15px;">密&nbsp;&nbsp;&nbsp;码：</label>
+                    <input type="password" name="password" id="password" class="normal-input"><br>
+                    <nav id="cookieGroup">
+                        <input type="checkbox" name="isCookie" id="isCookie">
+                        <label for="isCookie" style="font-size:15px;">一周之内免登录</label>
+                    </nav>
+                    <nav id="showCookie"></nav>
+                    <nav id="buttonGroup">
+                        <button type="submit" class="login-button">登录</button>
+                        <button type="submit" class="login-button" id="btnRegister" formaction="register.html">注册</button>
+                    </nav>
+                </fieldset>
+            </form>
+        </article>
+    </section>
+</body>
+
+</html>

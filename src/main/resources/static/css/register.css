@@ -1,0 +1,75 @@
+fieldset {
+    border: 0;
+    margin-left: 50px;
+}
+
+h1 {
+    text-align: center;
+    margin: 25px 0px 10px 0px;
+    font-family: '雅黑';
+}
+
+.text {
+    font-size: 15px;
+}
+
+section {
+    border: 1px solid #ccc;
+    width: 560px;
+    height: 770px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border-radius: 5px;
+    box-shadow: #ccc 6px 8px 5px;
+}
+
+input,
+button,
+select,
+textarea {
+    margin-top: 5px;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+    margin-top: 15px;
+}
+
+input {
+    height: 25px;
+}
+
+.msgImage {
+    margin-top: 13px;
+    margin-left: 20px;
+    width: 14px;
+    height: 14px;
+    float: left;
+}
+
+.msgInfo {
+    margin-top: 7px;
+    margin-left: 8px;
+    float: left;
+    line-height: 25px;
+}
+
+.successMsgImage {
+    background: url(../img/small_icons.jpg) no-repeat -247px -323px/400px 400px;
+}
+
+.successMsgInfo {
+    color: green;
+}
+
+.errorMsgInfo {
+    color: red;
+}
+
+.errorMsgImage {
+    background: url(../img/small_icons.jpg) no-repeat -110px -14px/400px 400px;
+}
