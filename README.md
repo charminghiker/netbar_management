@@ -1,5 +1,5 @@
 ## 齐鲁工业大学毕业设计——基于WEB的网吧计费系统
-**autor：charminghiker**  
+**autor：hiker7**  
 **email：charminghiker@163.com**
 
 #### 项目说明
