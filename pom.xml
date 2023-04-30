@@ -52,7 +52,7 @@
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
-            <version>5.1.0</version>
+            <version>5.3.1</version>
         </dependency>
         <!-- spring boot 整合pagehelper依赖 版本有兼容性问题 第一种方式依赖的包-->
         <dependency>
